@@ -1,0 +1,49 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.container {
+    margin-top: 5%;
+}
+
+.content {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center; /* Centraliza o conteúdo */
+    max-width: 600px; /* Largura máxima */
+    margin: 0 auto; /* Centraliza horizontalmente */
+    margin-bottom: 20px; /* Adicione esta linha para esticar verticalmente */
+}
+
+h1 {
+    margin-bottom: 30px;
+}
+
+.logo img {
+    width: 80px;
+    height: auto;
+    display: block;
+    margin: 0 auto 20px;
+}
+
+form {
+    width: 100%;
+}
+
+label {
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    width: 100%;
+}
+
+.btn-back {
+    margin-top: 10px;
+}

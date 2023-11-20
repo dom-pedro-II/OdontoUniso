@@ -1,0 +1,78 @@
+<?php
+// Conecta com o banco
+require_once "bd/conexao.php";
+
+$ra = $_GET['ra'];
+
+if (isset($_GET['consulta_id'])) {
+    $consultaID = $_GET['consulta_id'];
+
+    // Consulta SQL para obter os detalhes da consulta com base no ID da consulta
+    $sqlConsulta = "SELECT * FROM Consulta WHERE ID = $consultaID";
+    $resultConsulta = $conn->query($sqlConsulta);
+
+    if ($resultConsulta->num_rows > 0) {
+        $rowConsulta = $resultConsulta->fetch_assoc();
+        $dataConsulta = $rowConsulta['DataConsulta'];
+        $horaConsulta = $rowConsulta['HoraConsulta'];
+        $pacienteID = $rowConsulta['PacienteID'];
+
+        // Consulta SQL para obter o nome do paciente com base no ID do paciente
+        $sqlPaciente = "SELECT Nome FROM Paciente WHERE ID = $pacienteID";
+        $resultPaciente = $conn->query($sqlPaciente);
+
+        if ($resultPaciente->num_rows > 0) {
+            $rowPaciente = $resultPaciente->fetch_assoc();
+            $nomePaciente = $rowPaciente['Nome'];
+        } else {
+            $nomePaciente = "Paciente não encontrado";
+        }
+    } else {
+        echo "Consulta não encontrada.";
+    }
+} else {
+    echo "ID da consulta não especificado.";
+}
+?>
+
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encerrar Consulta</title>
+    <link rel="stylesheet" href="../style/finalizarconsulta.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+   
+</head>
+
+<body>        
+    <div class="container">
+        <h2>Encerrar Atendimento</h2>
+        <p><strong>Data da Consulta:</strong> <?php echo $dataConsulta; ?></p>
+        <p><strong>Hora da Consulta:</strong> <?php echo $horaConsulta; ?></p>
+        <p><strong>Paciente:</strong> <?php echo $nomePaciente; ?></p>
+        
+        <form method="POST" action="bd/atualizar_consulta.php?id=<?php echo $consultaID; ?>&ra=<?php echo $ra ?>&type=fim">
+            <div class="form-group">
+                <label for="realizada">O paciente foi atendido:</label>
+                <input type="text" class="form-control" id="realizada" name="realizada" required>
+            </div>
+            <div class="form-group">
+                <label for="atendimento">Registro de Atendimento:</label>
+                <input type="text" class="form-control" id="atendimento" name="atendimento" required>
+            </div>
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">Finalizar Consulta</button>
+                <a href="agenda.php?ra=<?php echo $ra; ?>&filtro=futuras" class="btn btn-secondary">Cancelar/Voltar</a>
+                <form method="POST" action="bd/excluir_consulta.php?id=<?php echo $consultaID; ?>&ra=<?php echo $ra ?>">
+                    <button type="submit" class="btn btn-danger" name="excluir_consulta">Desmarcar Consulta</button>
+                </form>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
